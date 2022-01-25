@@ -11,6 +11,12 @@ namespace BowlingScoreKeeper
         public int ThrowOne { get; set; }
         public int ThrowTwo { get; set; }
         public int ThrowThree { get; set; }
+        public int Score {
+            get
+            {
+                return ThrowOne + ThrowTwo + ThrowThree;
+            }
+                }
 
         public FinalFrame() { }
 
