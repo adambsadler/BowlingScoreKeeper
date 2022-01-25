@@ -26,5 +26,12 @@ namespace BowlingScoreKeeper
             ThrowTwo = secondThrow;
             ThrowThree = thirdThrow;
         }
+
+        public void Roll(int firstThrow, int secondThrow, int thirdThrow)
+        {
+            ThrowOne = firstThrow;
+            ThrowTwo = secondThrow;
+            ThrowThree = thirdThrow;
+        }
     }
 }

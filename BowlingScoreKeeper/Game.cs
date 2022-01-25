@@ -65,6 +65,7 @@ namespace BowlingScoreKeeper
         private void Start()
         {
             List<Frame> frames = _frameRepo.GetFrames();
+            var finalFrame = _frameRepo.GetFinalFrame();
             _frameRepo.ResetScore();
             foreach(Frame frame in frames)
             {
@@ -73,14 +74,14 @@ namespace BowlingScoreKeeper
                 var firstThrow = inputValidation.GetValidFirstThrow(Console.ReadLine());
                 if(firstThrow == 10)
                 {
-                    _frameRepo.Roll(frame.FrameID, firstThrow, 0);
+                    frame.Roll(firstThrow, 0);
                     Console.WriteLine("That's a strike!");
                 }
                 else 
                 {
                     Console.WriteLine($"Enter your second roll for the {frame.Name} frame: ");
                     var secondThrow = inputValidation.GetValidSecondThrow(Console.ReadLine(), firstThrow);
-                    _frameRepo.Roll(frame.FrameID, firstThrow, secondThrow);
+                    frame.Roll(firstThrow, secondThrow);
                 }
                 Console.WriteLine($"Total score after {frame.Name} frame: {_frameRepo.GetTotalScore()}");
                 Console.WriteLine("Press any key to continue...");
@@ -91,12 +92,12 @@ namespace BowlingScoreKeeper
             var finalFirstThrow = inputValidation.GetValidFirstThrow(Console.ReadLine());
             Console.WriteLine("Enter your second roll for the tenth frame: ");
             var finalSecondThrow = inputValidation.GetValidFinalSecondThrow(Console.ReadLine(), finalFirstThrow);
-            _frameRepo.FinalRoll(finalFirstThrow, finalSecondThrow, 0);
+            finalFrame.Roll(finalFirstThrow, finalSecondThrow, 0);
             if((finalFirstThrow + finalSecondThrow) >= 10)
             {
                 Console.WriteLine("Enter your third roll for the tenth frame: ");
                 var finalThirdThrow = inputValidation.GetValidFirstThrow(Console.ReadLine());
-                _frameRepo.FinalRoll(finalFirstThrow, finalSecondThrow, finalThirdThrow);
+                finalFrame.Roll(finalFirstThrow, finalSecondThrow, finalThirdThrow);
             }
             Console.WriteLine($"Your final score for this game is: {_frameRepo.GetTotalScore()}");
             Console.ReadKey();

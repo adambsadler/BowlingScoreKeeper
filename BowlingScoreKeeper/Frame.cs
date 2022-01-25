@@ -30,5 +30,22 @@ namespace BowlingScoreKeeper
             ThrowOne = firstThrow;
             ThrowTwo = secondThrow;
         }
+
+        public void Roll(int firstThrow, int secondThrow)
+        {
+            ThrowOne = firstThrow;
+            ThrowTwo = secondThrow;
+            if (firstThrow == 10)
+            {
+                IsStrike = true;
+            }
+            if (!IsStrike)
+            {
+                if ((secondThrow + firstThrow) == 10)
+                {
+                    IsSpare = true;
+                }
+            }
+        }
     }
 }

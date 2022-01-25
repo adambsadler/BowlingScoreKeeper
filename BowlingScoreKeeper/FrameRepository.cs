@@ -22,6 +22,11 @@ namespace BowlingScoreKeeper
             return _frames;
         }
 
+        public FinalFrame GetFinalFrame()
+        {
+            return finalFrame;
+        }
+
         // Resets the score for all frames
         public void ResetScore()
         {
@@ -46,33 +51,6 @@ namespace BowlingScoreKeeper
                 }
             }
             return null;
-        }
-
-        // Takes in the 2 numbers from the user and sets the frame score
-        public void Roll(int frameID, int firstThrow, int secondThrow)
-        {
-            var frame = GetFrameByID(frameID);
-            frame.ThrowOne = firstThrow;
-            frame.ThrowTwo = secondThrow;
-            if(firstThrow == 10)
-            {
-                frame.IsStrike = true;
-            }
-            if(!frame.IsStrike)
-            {
-                if((secondThrow + firstThrow) == 10)
-                {
-                    frame.IsSpare = true;
-                }
-            }
-        }
-
-        // Takes in the 3 numbers for the tenth frame and sets the score
-        public void FinalRoll(int firstThrow, int secondThrow, int thirdThrow)
-        {
-            finalFrame.ThrowOne = firstThrow;
-            finalFrame.ThrowTwo = secondThrow;
-            finalFrame.ThrowThree = thirdThrow;
         }
 
         // Calculates bonus for a strike
