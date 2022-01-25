@@ -75,26 +75,6 @@ namespace BowlingScoreKeeper
             finalFrame.ThrowThree = thirdThrow;
         }
 
-        // Calculates the score for a frame
-        public int GetScoreByFrame(int frameID)
-        {
-            var frame = GetFrameByID(frameID);
-            var score = 0;
-            score += frame.ThrowOne;
-            score += frame.ThrowTwo;
-            return score;
-        }
-
-        // Calculates the score for the tenth frame
-        public int GetFinalFrameScore()
-        {
-            var score = 0;
-            score += finalFrame.ThrowOne;
-            score += finalFrame.ThrowTwo;
-            score += finalFrame.ThrowThree;
-            return score;
-        }
-
         // Calculates bonus for a strike
         public int GetStrikeBonus(int frameID)
         {
@@ -106,7 +86,7 @@ namespace BowlingScoreKeeper
             {
                 var firstBonus = nextFrame.ThrowOne;
                 var secondBonus = nextFrame.ThrowTwo;
-                switch(frame.FrameID)
+                switch (frame.FrameID)
                 {
                     case 0:
                     case 1:
@@ -126,7 +106,7 @@ namespace BowlingScoreKeeper
                         }
                         break;
                     case 7:
-                        if(nextFrame.IsStrike)
+                        if (nextFrame.IsStrike)
                         {
                             bonus += firstBonus;
                             bonus += finalFrame.ThrowOne;
@@ -176,9 +156,9 @@ namespace BowlingScoreKeeper
             var totalScore = 0;
             for(int i = 0; i < 9; i++)
             {
-                totalScore += GetScoreByFrame(i);
+                totalScore += GetFrameByID(i).Score;
             }
-            totalScore += GetFinalFrameScore();
+            totalScore += finalFrame.Score;
             for (int i = 0; i < 9; i++)
             {
                 totalScore += GetStrikeBonus(i);
