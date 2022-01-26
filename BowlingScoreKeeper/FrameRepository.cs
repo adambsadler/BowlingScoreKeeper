@@ -9,7 +9,6 @@ namespace BowlingScoreKeeper
     public class FrameRepository
     {
         private List<IFrame> _frames = new List<IFrame>();
-        // private FinalFrame finalFrame = new FinalFrame(0, 0, 0);
 
         public void CreateFrame(IFrame frame)
         {
