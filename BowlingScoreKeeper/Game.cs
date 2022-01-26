@@ -64,11 +64,12 @@ namespace BowlingScoreKeeper
         // Starts the game
         private void Start()
         {
-            List<Frame> frames = _frameRepo.GetFrames();
-            var finalFrame = _frameRepo.GetFinalFrame();
+            List<IFrame> frames = _frameRepo.GetFrames();
+            var finalFrame = (FinalFrame)frames[9];
             _frameRepo.ResetScore();
-            foreach(Frame frame in frames)
+            for (int i = 0; i < 9; i++)
             {
+                var frame = _frameRepo.GetFrameByID(i);
                 Console.Clear();
                 Console.WriteLine($"Enter your first roll for the {frame.Name} frame: ");
                 var firstThrow = inputValidation.GetValidFirstThrow(Console.ReadLine());
@@ -92,12 +93,12 @@ namespace BowlingScoreKeeper
             var finalFirstThrow = inputValidation.GetValidFirstThrow(Console.ReadLine());
             Console.WriteLine("Enter your second roll for the tenth frame: ");
             var finalSecondThrow = inputValidation.GetValidFinalSecondThrow(Console.ReadLine(), finalFirstThrow);
-            finalFrame.Roll(finalFirstThrow, finalSecondThrow, 0);
+            finalFrame.Roll(finalFirstThrow, finalSecondThrow);
             if((finalFirstThrow + finalSecondThrow) >= 10)
             {
                 Console.WriteLine("Enter your third roll for the tenth frame: ");
                 var finalThirdThrow = inputValidation.GetValidFirstThrow(Console.ReadLine());
-                finalFrame.Roll(finalFirstThrow, finalSecondThrow, finalThirdThrow);
+                finalFrame.FinalRoll(finalThirdThrow);
             }
             Console.WriteLine($"Your final score for this game is: {_frameRepo.GetTotalScore()}");
             Console.ReadKey();
@@ -116,6 +117,7 @@ namespace BowlingScoreKeeper
             Frame seventhFrame = new Frame(6, "seventh", 0, 0);
             Frame eighthFrame = new Frame(7, "eighth", 0, 0);
             Frame ninthFrame = new Frame(8, "ninth", 0, 0);
+            FinalFrame tenthFrame = new FinalFrame(0, 0, 0);
             _frameRepo.CreateFrame(firstFrame);
             _frameRepo.CreateFrame(secondFrame);
             _frameRepo.CreateFrame(thirdFrame);
@@ -125,6 +127,7 @@ namespace BowlingScoreKeeper
             _frameRepo.CreateFrame(seventhFrame);
             _frameRepo.CreateFrame(eighthFrame);
             _frameRepo.CreateFrame(ninthFrame);
+            _frameRepo.CreateFrame(tenthFrame);
         }
     }
 }

@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace BowlingScoreKeeper
 {
-    public class Frame
+    public interface IFrame
+    {
+        public int FrameID { get; set; }
+        public string Name { get; set; }
+        public int ThrowOne { get; set; }
+        public int ThrowTwo { get; set; }
+        public int Score { get; }
+        public void Roll(int firstThrow, int secondThrow);
+    }
+    public class Frame : IFrame
     {
         public int FrameID { get; set; }
         public string Name { get; set; }
@@ -46,6 +55,42 @@ namespace BowlingScoreKeeper
                     IsSpare = true;
                 }
             }
+        }
+    }
+
+    public class FinalFrame : IFrame
+    {
+        public int FrameID { get; set; }
+        public string Name { get; set; }
+        public int ThrowOne { get; set; }
+        public int ThrowTwo { get; set; }
+        public int ThrowThree { get; set; }
+        public int Score
+        {
+            get
+            {
+                return ThrowOne + ThrowTwo + ThrowThree;
+            }
+        }
+
+        public FinalFrame() { }
+
+        public FinalFrame(int firstThrow, int secondThrow, int thirdThrow)
+        {
+            ThrowOne = firstThrow;
+            ThrowTwo = secondThrow;
+            ThrowThree = thirdThrow;
+        }
+
+        public void Roll(int firstThrow, int secondThrow)
+        {
+            ThrowOne = firstThrow;
+            ThrowTwo = secondThrow;
+        }
+
+        public void FinalRoll(int thirdThrow)
+        {
+            ThrowThree = thirdThrow;
         }
     }
 }

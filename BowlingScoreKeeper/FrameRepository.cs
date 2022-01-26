@@ -8,42 +8,56 @@ namespace BowlingScoreKeeper
 {
     public class FrameRepository
     {
-        private List<Frame> _frames = new List<Frame>();
-        private FinalFrame finalFrame = new FinalFrame(0, 0, 0);
+        private List<IFrame> _frames = new List<IFrame>();
+        // private FinalFrame finalFrame = new FinalFrame(0, 0, 0);
 
-        public void CreateFrame(Frame frame)
+        public void CreateFrame(IFrame frame)
         {
             _frames.Add(frame);
         }
 
         // Gets all frames
-        public List<Frame> GetFrames()
+        public List<IFrame> GetFrames()
         {
             return _frames;
         }
 
+        // Get a list of the first nine frames, ignoring the tenth
+        public List<Frame> GetNineFrames()
+        {
+            var frames = new List<Frame>();
+            foreach(IFrame frame in _frames)
+            {
+                if(frame is Frame)
+                {
+                    frames.Add((Frame)frame);
+                }
+            }
+            return frames;
+        }
+
+        // Gets the tenth frame
         public FinalFrame GetFinalFrame()
         {
-            return finalFrame;
+            return (FinalFrame)_frames[9];
         }
 
         // Resets the score for all frames
         public void ResetScore()
         {
-            foreach (Frame frame in _frames)
+            var finalFrame = GetFinalFrame();
+            foreach (IFrame frame in _frames)
             {
                 frame.ThrowOne = 0;
                 frame.ThrowTwo = 0;
             }
-            finalFrame.ThrowOne = 0;
-            finalFrame.ThrowTwo = 0;
             finalFrame.ThrowThree = 0;
         }
 
         // Gets a frame by ID
-        public Frame GetFrameByID(int frameID)
+        public IFrame GetFrameByID(int frameID)
         {
-            foreach(Frame frame in _frames)
+            foreach(IFrame frame in _frames)
             {
                 if(frame.FrameID == frameID)
                 {
@@ -56,10 +70,12 @@ namespace BowlingScoreKeeper
         // Calculates bonus for a strike
         public int GetStrikeBonus(int frameID)
         {
-            var frame = GetFrameByID(frameID);
+            var frame = (Frame)GetFrameByID(frameID);
+            var frames = GetNineFrames();
             var bonus = 0;
-            var nextFrame = _frames[(_frames.IndexOf(frame) + 1) % _frames.Count];
-            var otherFrame = _frames[(_frames.IndexOf(frame) + 2) % _frames.Count];
+            var nextFrame = frames[(frames.IndexOf(frame) + 1) % frames.Count];
+            var otherFrame = frames[(frames.IndexOf(frame) + 2) % frames.Count];
+            var finalFrame = GetFinalFrame();
             if (frame.IsStrike)
             {
                 var firstBonus = nextFrame.ThrowOne;
@@ -110,15 +126,16 @@ namespace BowlingScoreKeeper
         // Calculates bonus for a spare
         public int GetSpareBonus(int frameID)
         {
-            var frame = GetFrameByID(frameID);
+            var frame = (Frame)GetFrameByID(frameID);
+            var frames = GetNineFrames();
             var bonus = 0;
-            var nextFrame = _frames[(_frames.IndexOf(frame) + 1) % _frames.Count];
+            var nextFrame = frames[(frames.IndexOf(frame) + 1) % frames.Count];
             if (frame.IsSpare)
             {
                 var spareBonus = nextFrame.ThrowOne;
                 if (frame.FrameID == 8)
                 {
-                    bonus += finalFrame.ThrowOne;
+                    bonus += _frames[9].ThrowOne;
                 }
                 else
                 {
@@ -136,7 +153,7 @@ namespace BowlingScoreKeeper
             {
                 totalScore += GetFrameByID(i).Score;
             }
-            totalScore += finalFrame.Score;
+            totalScore += GetFinalFrame().Score;
             for (int i = 0; i < 9; i++)
             {
                 totalScore += GetStrikeBonus(i);
